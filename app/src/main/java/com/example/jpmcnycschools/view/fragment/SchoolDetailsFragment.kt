@@ -10,7 +10,7 @@ import com.example.jpmcnycschools.databinding.FragmentSchoolDetailsBinding
 import com.example.jpmcnycschools.model.SatResponse
 import com.example.jpmcnycschools.model.SchoolResponse
 
-class SchoolDetailsFragment(private var school: SchoolResponse): ViewModelFragment() {
+class SchoolDetailsFragment: ViewModelFragment() {
     private var _binding: FragmentSchoolDetailsBinding? = null
     private val binding: FragmentSchoolDetailsBinding get() = _binding!!
 
@@ -20,8 +20,9 @@ class SchoolDetailsFragment(private var school: SchoolResponse): ViewModelFragme
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSchoolDetailsBinding.inflate(layoutInflater)
-        renderContactAndOverview(school)
-        configureObserver(school.dbn)
+        val passedBundle: SchoolResponse? = arguments?.getParcelable("KEY")
+        renderContactAndOverview(passedBundle)
+        configureObserver(passedBundle?.dbn)
         return binding.root
     }
 
@@ -59,16 +60,16 @@ class SchoolDetailsFragment(private var school: SchoolResponse): ViewModelFragme
         }
     }
 
-    private fun renderContactAndOverview(school: SchoolResponse) {
+    private fun renderContactAndOverview(school: SchoolResponse?) {
         binding.apply {
             pbDetailsLoading.visibility = View.GONE
 
-            tvSchoolName.text = school.school_name
-            tvAddress.text = school.primary_address_line_1
-            tvPhoneNumber.text = school.phone_number
-            tvWebsite.text = school.website
+            tvSchoolName.text = school?.school_name
+            tvAddress.text = school?.primary_address_line_1
+            tvPhoneNumber.text = school?.phone_number
+            tvWebsite.text = school?.website
 
-            tvOverviewParagraph.text = school.overview_paragraph
+            tvOverviewParagraph.text = school?.overview_paragraph
         }
     }
 

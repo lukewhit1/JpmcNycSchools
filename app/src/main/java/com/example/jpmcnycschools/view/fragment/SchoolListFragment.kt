@@ -17,13 +17,16 @@ class SchoolListFragment: ViewModelFragment(), OpenDetails {
 
     private lateinit var schoolListPageAdapter: SchoolListPageAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.setLoadingState()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSchoolListBinding.inflate(layoutInflater)
-        viewModel.setLoadingState()
         configureObserver()
         return binding.root
     }
@@ -65,9 +68,13 @@ class SchoolListFragment: ViewModelFragment(), OpenDetails {
     override fun openDetails(school: SchoolResponse) {
         viewModel.setSchoolDetails()
         //requireActivity().supportFragmentManager.setFragmentResult("requestKey", bundleOf("bundleKey" to school))
+        val bundle = Bundle()
+        bundle.putParcelable("KEY", school)
+        val frag2 = SchoolDetailsFragment()
+        frag2.arguments = bundle
 
         activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.fragment_container, SchoolDetailsFragment(school))
+            ?.replace(R.id.fragment_container, frag2)
             ?.addToBackStack(null)
             ?.commit()
     }
